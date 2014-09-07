@@ -12,30 +12,35 @@ class Hook(object):
     is_infobox = lambda s, x: GetWindowText(x) in s.fields
 
     def __init__(self):
-        pass
+        self.dlgs = None
+        self.infobox = None
 
     def find_mpchc(self):
         mainwindow = FindWindow('MediaPlayerClassicW', None)
         while mainwindow == 0:
             mainwindow = FindWindow('MediaPlayerClassicW', None)
             sleep(1)
-        return self.filter_children(mainwindow, self.is_dialog)
+        self.dlgs = self.filter_children(mainwindow, self.is_dialog)
 
     def find_infobox(self):
-        dlgs = self.find_mpchc()
+        if self.dlgs is None:
+            self.find_mpchc()
         # Waiting for any track playback to find appropriate dialog box
         while 1:
-            for dialog in dlgs:
+            for dialog in self.dlgs:
                 try:
                     if len(self.filter_children(dialog, self.is_infobox)) > 0:
-                        return self.filter_children(dialog, lambda x: 1)
+                        self.infobox = self.filter_children(dialog,
+                                                            lambda x: 1)
+                        return
                 except Exception:
                     pass
             sleep(1)
 
-
     def update(self):
-        pass
+        if self.infobox is None:
+            self.find_infobox()
+        return GetWindowText(self.infobox[1]), GetWindowText(self.infobox[3])
 
     @staticmethod
     def filter_children(window, condition):
@@ -44,9 +49,8 @@ class Hook(object):
         EnumChildWindows(window, check, None)
         return children
 
-
-hk = Hook().find_infobox()
-
-while 1:
-    print GetWindowText(hk[1]), '|', GetWindowText(hk[3])
-    sleep(1)
+if __name__ == '__main__':
+    hk = Hook()
+    while 1:
+        print ' - '.join(reversed(hk.update()))
+        sleep(1)
