@@ -40,6 +40,8 @@ class Hook(object):
     def update(self):
         if self.infobox is None:
             self.find_infobox()
+        if GetWindowText(self.infobox[0]) not in self.fields:
+            self.find_infobox()
         return GetWindowText(self.infobox[1]), GetWindowText(self.infobox[3])
 
     @staticmethod
