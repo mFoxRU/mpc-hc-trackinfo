@@ -56,7 +56,7 @@ class Hook(object):
     def get_info(self, reverse=True):
         if GetWindowText(self._infobox[0]) not in self._fields:
             self._find_infobox()
-        retval = [GetWindowText(self._infobox[x]) for x in (1, 3)]
+        retval = [GetWindowText(x) for x in self._infobox[1::2]]
         return reversed(retval) if reverse else retval
 
 
