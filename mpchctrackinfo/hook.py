@@ -2,8 +2,8 @@ __author__ = 'mFoxRU'
 
 from time import sleep
 
-from win32gui import FindWindow, EnumChildWindows, GetClassName, \
-    GetWindowText, IsWindow
+from win32gui import (FindWindow, EnumChildWindows, GetClassName,
+    GetWindowText, IsWindow)
 
 
 class Hook(object):
