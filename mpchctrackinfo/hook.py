@@ -3,7 +3,7 @@ __author__ = 'mFoxRU'
 from time import sleep
 
 from win32gui import (FindWindow, EnumChildWindows, GetClassName,
-    GetWindowText, IsWindow)
+                      GetWindowText, IsWindow)
 
 
 class Hook(object):
@@ -32,8 +32,7 @@ class Hook(object):
 
     def _find_infobox(self):
         if not IsWindow(self._mpc):
-            if GetClassName(self._mpc) != self._mpc_name:
-                self._find_mpchc()
+            self._find_mpchc()
         # Waiting for any track playback to find appropriate dialog box
         while 1:
             for dialog in self._dlgs:
